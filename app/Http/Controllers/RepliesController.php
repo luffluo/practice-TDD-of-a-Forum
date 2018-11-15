@@ -45,7 +45,7 @@ class RepliesController extends Controller
             'user_id' => auth()->id()
         ]);
 
-        return back();
+        return redirect($thread->path());
     }
 
     /**
