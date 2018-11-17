@@ -21,8 +21,11 @@ class ThreadsController extends Controller
      */
     public function index(ThreadsFilter $filter, Channel $channel = null)
     {
-
         $threads = $this->getThreads($filter, $channel);
+
+        if (request()->expectsJson()) {
+            return $threads;
+        }
 
         return view('threads.index', compact('threads'));
     }
