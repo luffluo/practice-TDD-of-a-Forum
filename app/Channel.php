@@ -9,4 +9,14 @@ class Channel extends Model
     protected $table = 'channels';
 
     protected $fillable = ['name', 'slug'];
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    public function threads()
+    {
+        return $this->hasMany('App\Thread');
+    }
 }
