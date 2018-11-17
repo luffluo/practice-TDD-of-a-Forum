@@ -2,14 +2,14 @@
 
 namespace Tests\Unit;
 
-use App\Reply;
-use App\Thread;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ReadThreadsTest extends TestCase
 {
+    use DatabaseMigrations;
+
     protected $thread;
 
     public function setUp()
@@ -57,7 +57,6 @@ class ReadThreadsTest extends TestCase
 
         $threadByRose1 = create('App\Thread', ['user_id' => $user->id]);
         $threadNotByRose1 = create('App\Thread');
-
 
         $this->get('/threads?by=' . $user->name)
             ->assertSee($threadByRose1->title)

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Channel;
 use App\Thread;
+use App\Channel;
 use Illuminate\Http\Request;
+use App\Filters\ThreadsFilter;
 
 class ThreadsController extends Controller
 {
@@ -18,23 +19,23 @@ class ThreadsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, Channel $channel = null)
+    public function index(ThreadsFilter $filter, Channel $channel = null)
     {
-        if ($channel && $channel->exists) {
-            $query = $channel->threads();
-        } else {
-            $query = Thread::query();
-        }
 
-        if ($username = $request->get('by')) {
-            $query->whereHas('creator', function ($q) use ($username) {
-                $q->where('name', $username);
-            });
-        }
-
-        $threads = $query->latest()->get();
+        $threads = $this->getThreads($filter, $channel);
 
         return view('threads.index', compact('threads'));
+    }
+
+    public function getThreads(ThreadsFilter $filter, Channel $channel = null)
+    {
+        $query = Thread::query()->latest()->filter($filter);
+
+        if ($channel && $channel->exists) {
+            $query->where('channel_id', $channel->id);
+        }
+
+        return $query->get();
     }
 
     /**

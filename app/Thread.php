@@ -55,4 +55,9 @@ class Thread extends Model
     {
         return $this->replies()->create($array);
     }
+
+    public function scopeFilter($query, $filters)
+    {
+        return $filters->apply($query);
+    }
 }
