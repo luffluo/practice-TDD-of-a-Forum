@@ -18,13 +18,21 @@ class ThreadsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel = null)
+    public function index(Request $request, Channel $channel = null)
     {
         if ($channel && $channel->exists) {
-            $threads = $channel->threads()->latest()->get();
+            $query = $channel->threads();
         } else {
-            $threads = Thread::query()->latest()->get();
+            $query = Thread::query();
         }
+
+        if ($username = $request->get('by')) {
+            $query->whereHas('creator', function ($q) use ($username) {
+                $q->where('name', $username);
+            });
+        }
+
+        $threads = $query->latest()->get();
 
         return view('threads.index', compact('threads'));
     }
