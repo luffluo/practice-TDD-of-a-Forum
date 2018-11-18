@@ -17,4 +17,25 @@ class Reply extends Model
     {
         return $this->belongsTo('App\User', 'user_id', 'id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function favorites()
+    {
+        return $this->morphMany('App\Favorite', 'favorited');
+    }
+
+    /**
+     * 点赞
+     * @return Model
+     */
+    public function favorite()
+    {
+        $attributes = ['user_id' => auth()->id()];
+
+        if (! $this->favorites()->where($attributes)->exists()) {
+            return $this->favorites()->create($attributes);
+        }
+    }
 }
