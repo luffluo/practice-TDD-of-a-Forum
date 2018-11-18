@@ -38,7 +38,7 @@ class ThreadsController extends Controller
             $query->where('channel_id', $channel->id);
         }
 
-        return $query->with('channel')->get();
+        return $query->get();
     }
 
     /**
@@ -89,7 +89,7 @@ class ThreadsController extends Controller
     public function show($channelSlug, Thread $thread)
     {
         return view('threads.show', [
-            'thread'  => $thread->load('creator'),
+            'thread'  => $thread,
             'replies' => $thread->replies()->paginate(10),
         ]);
     }
