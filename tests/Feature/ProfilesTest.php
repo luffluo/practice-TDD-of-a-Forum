@@ -23,7 +23,7 @@ class ProfilesTest extends TestCase
 
     public function test_profiles_display_all_threads_created_by_associated_user()
     {
-        $user = \App\User::query()->where('name', 'Luff')->first();
+        $user = create('App\User');
 
         $thread = create('App\Thread', ['user_id' => $user->id]);
 
