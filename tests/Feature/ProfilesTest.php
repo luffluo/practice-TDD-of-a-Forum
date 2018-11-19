@@ -8,6 +8,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ProfilesTest extends TestCase
 {
+    use DatabaseMigrations;
+
     /**
      * A basic test example.
      *

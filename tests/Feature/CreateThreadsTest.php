@@ -9,6 +9,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CreateThreadsTest extends TestCase
 {
+    use DatabaseMigrations;
+
     /**
      * A basic test example.
      *
@@ -62,16 +64,16 @@ class CreateThreadsTest extends TestCase
 
     public function test_authorized_users_can_delete_threads()
     {
-        $this->signIn($user = create('App\User'));
+        $this->signIn();
 
-        $thread = create('App\Thread', ['user_id' => $user->id]);
+        $thread = create('App\Thread', ['user_id' => auth()->id()]);
         $reply = create('App\Reply', ['thread_id' => $thread->id]);
 
-        $this->json('DELETE', $thread->path())
-            ->assertStatus(204);
+        $response = $this->json('DELETE', $thread->path());
+        $response->assertStatus(204);
 
-        $this->assertDatabaseMissing($thread->getTable(), ['id' => $thread->id]);
-        $this->assertDatabaseMissing($reply->getTable(), ['id' => $reply->id]);
+        $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
     }
 
     public function test_unauthorized_users_may_not_delete_threads()

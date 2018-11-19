@@ -8,6 +8,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class FavoritesTest extends TestCase
 {
+    use DatabaseMigrations;
+
     public function test_guests_can_not_favorite_anything()
     {
         $this->withExceptionHandling()

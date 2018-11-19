@@ -8,6 +8,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ChannelTest extends TestCase
 {
+    use DatabaseMigrations;
+
     public function test_a_channel_consists_of_threads()
     {
         $channel = create('App\Channel');
