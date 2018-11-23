@@ -43863,7 +43863,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             count: this.reply.favoritesCount,
-            active: this.reply.active
+            active: this.reply.isFavorited
         };
     },
 
