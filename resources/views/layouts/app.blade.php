@@ -30,6 +30,12 @@
         .flex {
             flex: 1;
         }
+        .mr-1 {
+            margin-right: 1em;
+        }
+        [v-cloak] {
+            display: none;
+        }
     </style>
 </head>
 <body>
