@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -16,6 +16,7 @@ class FavoritesTest extends TestCase
             ->post('/replies/1/favorites')
             ->assertRedirect('/login');
     }
+
     /**
      * A basic test example.
      *
@@ -42,11 +43,24 @@ class FavoritesTest extends TestCase
 
             $this->post('/replies/' . $reply->id . '/favorites');
             $this->post('/replies/' . $reply->id . '/favorites');
-
         } catch (\Exception $e) {
             $this->fail('Did not expect to insert the same record set twice.');
         }
 
         $this->assertCount(1, $reply->favorites);
+    }
+
+    public function test_an_authenticated_user_can_unfavorite_a_reply()
+    {
+        $this->signIn();
+
+        /* @var \App\Reply $reply */
+        $reply = create('App\Reply');
+
+        $reply->favorite();
+
+        $this->delete('replies/' . $reply->id . '/favorites');
+
+        $this->assertCount(0, $reply->fresh()->favorites);
     }
 }
