@@ -76,7 +76,8 @@ class ThreadsController extends Controller
         $thread->channel()->associate($request->channel_id);
         $thread->save();
 
-        return redirect($thread->path());
+        return redirect($thread->path())
+            ->with('flash', 'Your thread has been published!');
     }
 
     /**
