@@ -84,7 +84,7 @@ class RepliesController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @param  \App\Reply               $reply
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|array
      */
     public function update(Request $request, Reply $reply)
     {
@@ -94,6 +94,10 @@ class RepliesController extends Controller
             'body'    => $request->body,
         ]);
 
+        if ($request->expectsJson()) {
+            return ['status' => 'Reply updated'];
+        }
+
         return back()->with('flash', 'Your reply has been updated.');
     }
 
@@ -102,13 +106,17 @@ class RepliesController extends Controller
      *
      * @param  \App\Reply $reply
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|array
      */
-    public function destroy(Reply $reply)
+    public function destroy(Request $request, Reply $reply)
     {
         $this->authorize('update', $reply);
 
         $reply->delete();
+
+        if ($request->expectsJson()) {
+            return ['status' => 'Reply deleted'];
+        }
 
         return back();
     }
