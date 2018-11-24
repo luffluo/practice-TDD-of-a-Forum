@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Channel;
 use App\Reply;
 use App\Thread;
 use Illuminate\Http\Request;
@@ -10,7 +11,7 @@ class RepliesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['index']);
     }
 
     /**
@@ -18,9 +19,9 @@ class RepliesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, $channelSlug, Thread $thread)
     {
-        //
+        return $thread->replies()->paginate(20);
     }
 
     /**

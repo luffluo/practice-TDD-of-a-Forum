@@ -23,6 +23,7 @@ Vue.prototype.authorize = function (hander) {
  */
 
 Vue.component('flash', require('./components/Flash.vue'));
+Vue.component('paginator', require('./components/Paginator.vue'));
 Vue.component('thread-view', require('./components/Thread.vue'));
 Vue.component('favorite', require('./components/Favorite.vue'));
 
