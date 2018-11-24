@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CreateThreadsTest extends TestCase
 {
-    use DatabaseMigrations;
+    // use DatabaseMigrations;
 
     /**
      * A basic test example.

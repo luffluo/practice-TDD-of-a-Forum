@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ParticipateInForumTest extends TestCase
 {
-    use DatabaseMigrations;
+    // use DatabaseMigrations;
 
     public function test_unauthenticated_user_may_no_add_replies()
     {
