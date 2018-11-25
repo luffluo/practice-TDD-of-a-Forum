@@ -1,5 +1,5 @@
 <template>
-    <div :id="'reply'+id" class="panel panel-default">
+    <div :id="'reply-'+id" class="panel panel-default">
         <div class="panel-heading">
             <div class="level">
                 <h5 class="flex">
