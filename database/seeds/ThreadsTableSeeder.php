@@ -24,7 +24,7 @@ class ThreadsTableSeeder extends Seeder
                 'channel_id' => $channels->random()->id,
             ]);
 
-            factory('App\Reply', mt_rand(1, 11))->create([
+            factory('App\Reply', mt_rand(0, 40))->create([
                 'user_id'   => $users->random()->id,
                 'thread_id' => $thread->id,
             ]);

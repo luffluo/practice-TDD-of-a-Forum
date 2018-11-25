@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ParticipateInForumTest extends TestCase
 {
-    // use DatabaseMigrations;
+    use DatabaseMigrations;
 
     public function test_unauthenticated_user_may_no_add_replies()
     {
@@ -30,8 +30,8 @@ class ParticipateInForumTest extends TestCase
         $this->post($thread->path() . '/replies', $reply->toArray());
 
         // Then their reply should be visible on the page
-        $this->get($thread->path())
-            ->assertSee($reply->body);
+        $this->assertDatabaseHas($reply->getTable(), ['body' => $reply->body]);
+        $this->assertEquals(1, $thread->fresh()->replies_count);
     }
 
     public function test_a_replay_requires_a_body()
@@ -59,7 +59,7 @@ class ParticipateInForumTest extends TestCase
             ->assertStatus(403);
     }
 
-    public function test_an_authorized_user_can_delete_replies()
+    public function test_an_authorized_users_can_delete_replies()
     {
         $this->signIn();
 
@@ -69,6 +69,7 @@ class ParticipateInForumTest extends TestCase
             ->assertStatus(302);
 
         $this->assertDatabaseMissing($reply->getTable(), ['id' => $reply->id]);
+        $this->assertEquals(0, $reply->thread->fresh()->replies_count);
     }
 
     public function test_unauthorized_users_cannnot_update_replies()

@@ -6,7 +6,7 @@ use App\User;
 
 class ThreadsFilter extends Filter
 {
-    protected $filters = ['by', 'popularity'];
+    protected $filters = ['by', 'popularity', 'unanswered'];
 
     public function by($username)
     {
@@ -21,5 +21,10 @@ class ThreadsFilter extends Filter
         $this->builder->getQuery()->orders = [];
 
         return $this->builder->orderBy('replies_count', 'desc');
+    }
+
+    public function unanswered()
+    {
+        return $this->builder->where('replies_count',0);
     }
 }
