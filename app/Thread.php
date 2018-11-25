@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Notifications\ThreadWasUpdated;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
@@ -89,7 +90,14 @@ class Thread extends Model
      */
     public function addReply(array $array)
     {
-        return $this->replies()->create($array);
+        $reply = $this->replies()->create($array);
+
+        $this->subscriptions
+            ->filter(function ($sub) use ($reply) {
+                return $sub->user_id != $reply->user_id;
+            })->each->notify($reply);
+
+        return $reply;
     }
 
     public function scopeFilter($query, $filters)

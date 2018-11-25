@@ -80,7 +80,7 @@ class ThreadTest extends TestCase
 
         $thread->unsubscribe($userId = 1);
 
-        $this->assertEquals(
+        $this->assertCount(
             0,
             $thread->subscriptions
         );
