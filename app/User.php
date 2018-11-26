@@ -44,4 +44,22 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Activity');
     }
+
+    /**
+     * @param $thread
+     *
+     * @return string
+     */
+    public function visitedThreadCacheKey($thread)
+    {
+        return sprintf('users.%s.threads.%s', $this->id, $thread->id);
+    }
+
+    public function read($thread)
+    {
+        cache()->forever(
+            $this->visitedThreadCacheKey($thread),
+            \Carbon\Carbon::now()
+        );
+    }
 }

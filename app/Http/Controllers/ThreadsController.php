@@ -89,6 +89,10 @@ class ThreadsController extends Controller
      */
     public function show($channelSlug, Thread $thread)
     {
+        if (auth()->check()) {
+            auth()->user()->read($thread);
+        }
+
         return view('threads.show', compact('thread'));
     }
 
