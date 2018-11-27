@@ -33,18 +33,22 @@ class RepliesController extends Controller
      */
     public function store(Request $request, $channelSlug, Thread $thread)
     {
-        $this->validateReply($request);
+        try {
 
-        $reply = $thread->addReply([
-            'body'    => $request->body,
-            'user_id' => auth()->id(),
-        ]);
+            $this->validateReply($request);
 
-        if ($request->expectsJson()) {
-            return $reply->load('owner');
+            $reply = $thread->addReply([
+                'body'    => $request->body,
+                'user_id' => auth()->id(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                'Sorry, your reply could not be saved at this time.',
+                422
+            );
         }
 
-        return back()->with('flash', 'Your reply has been left.');
+        return $reply->load('owner');
     }
 
     /**
@@ -59,11 +63,15 @@ class RepliesController extends Controller
     {
         $this->authorize('update', $reply);
 
-        $this->validateReply($request);
+        try {
 
-        $reply->update([
-            'body'    => $request->body,
-        ]);
+            $this->validateReply($request);
+
+            $reply->update(['body' => $request->body,]);
+
+        } catch (\Exception $e) {
+            return response('Sorry, your reply could not be saved at this time.', 422);
+        }
 
         if ($request->expectsJson()) {
             return ['status' => 'Reply updated'];
