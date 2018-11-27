@@ -25,29 +25,15 @@ class RepliesController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $channelSlug, Thread $thread, Spam $spam)
+    public function store(Request $request, $channelSlug, Thread $thread)
     {
-        $this->validate($request, [
-            'body' => 'required',
-        ]);
-
-        $spam->detect($request->body);
+        $this->validateReply($request);
 
         $reply = $thread->addReply([
             'body'    => $request->body,
@@ -62,30 +48,6 @@ class RepliesController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Reply $reply
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Reply $reply)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Reply $reply
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Reply $reply)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
@@ -96,6 +58,8 @@ class RepliesController extends Controller
     public function update(Request $request, Reply $reply)
     {
         $this->authorize('update', $reply);
+
+        $this->validateReply($request);
 
         $reply->update([
             'body'    => $request->body,
@@ -126,5 +90,12 @@ class RepliesController extends Controller
         }
 
         return back();
+    }
+
+    public function validateReply(Request $request)
+    {
+        $this->validate($request, ['body' => 'required']);
+
+        app(Spam::class)->detect($request->body);
     }
 }

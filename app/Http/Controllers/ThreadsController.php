@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Thread;
 use App\Channel;
+use App\Inspections\Spam;
 use Illuminate\Http\Request;
 use App\Filters\ThreadsFilter;
 
@@ -58,7 +59,7 @@ class ThreadsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Spam $spam)
     {
         $this->validate($request, [
                 'title'      => 'required',
@@ -66,6 +67,9 @@ class ThreadsController extends Controller
                 'channel_id' => 'required|exists:channels,id',
             ]
         );
+
+        $spam->detect($request->title);
+        $spam->detect($request->body);
 
         $thread = new Thread([
             'title' => $request->title,
@@ -97,38 +101,13 @@ class ThreadsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Thread $thread
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Thread $thread)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Thread              $thread
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Thread $thread)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Thread $thread
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Channel $channel, Thread $thread)
+    public function destroy(Request $request, $channelSlug, Thread $thread)
     {
         $this->authorize('update', $thread);
 
