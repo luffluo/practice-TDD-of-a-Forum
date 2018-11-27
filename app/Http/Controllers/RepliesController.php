@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostRequest;
 use App\Reply;
 use App\Thread;
 use App\Inspections\Spam;
@@ -29,34 +30,13 @@ class RepliesController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $channelSlug, Thread $thread, Reply $reply)
+    public function store(CreatePostRequest $request, $channelSlug, Thread $thread, Reply $reply)
     {
-        if (Gate::denies('create', $reply)) {
-            return response(
-                'You are posting too frequently. Please take a break. :)',
-                422
-            );
-        }
-
-        try {
-
-            $this->validate($request, ['body' => 'required|spamfree']);
-
-            $reply = $thread->addReply([
-                'body'    => $request->body,
-                'user_id' => auth()->id(),
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(
-                'Sorry, your reply could not be saved at this time.',
-                422
-            );
-        }
-
-        return $reply->load('owner');
+        return $reply = $thread->addReply([
+            'body'    => $request->body,
+            'user_id' => auth()->id(),
+        ])->load('owner');
     }
 
     /**
@@ -76,7 +56,6 @@ class RepliesController extends Controller
             $this->validate($request, ['body' => 'required|spamfree']);
 
             $reply->update(['body' => $request->body]);
-
         } catch (\Exception $e) {
             return response('Sorry, your reply could not be saved at this time.', 422);
         }

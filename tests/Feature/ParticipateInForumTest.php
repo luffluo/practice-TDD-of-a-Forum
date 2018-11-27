@@ -102,8 +102,10 @@ class ParticipateInForumTest extends TestCase
         ]);
     }
 
-    public function test_replies_contain_spam_may_not_be_created()
+    public function test_replies_that_contain_spam_may_not_be_created()
     {
+        $this->withExceptionHandling();
+
         $this->signIn();
 
         $thread = create('App\Thread');
@@ -112,11 +114,13 @@ class ParticipateInForumTest extends TestCase
         ]);
 
         $this->post($thread->path() . '/replies', $reply->toArray())
-            ->assertStatus(422);
+            ->assertStatus(429);
     }
 
     public function test_users_may_only_reply_a_maximum_of_once_per_minute()
     {
+        $this->withExceptionHandling();
+
         $this->signIn();
 
         $thread = create('App\Thread');
@@ -128,6 +132,6 @@ class ParticipateInForumTest extends TestCase
             ->assertStatus(200);
 
         $this->post($thread->path() . '/replies', $reply->toArray())
-            ->assertStatus(422);
+            ->assertStatus(429);
     }
 }
