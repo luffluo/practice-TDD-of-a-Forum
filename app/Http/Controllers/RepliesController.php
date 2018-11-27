@@ -6,6 +6,7 @@ use App\Reply;
 use App\Thread;
 use App\Inspections\Spam;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class RepliesController extends Controller
 {
@@ -31,8 +32,15 @@ class RepliesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $channelSlug, Thread $thread)
+    public function store(Request $request, $channelSlug, Thread $thread, Reply $reply)
     {
+        if (Gate::denies('create', $reply)) {
+            return response(
+                'You are posting too frequently. Please take a break. :)',
+                422
+            );
+        }
+
         try {
 
             $this->validate($request, ['body' => 'required|spamfree']);

@@ -46,6 +46,14 @@ class User extends Authenticatable
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne|\Illuminate\Database\Query\Builder
+     */
+    public function lastReply()
+    {
+        return $this->hasOne('App\Reply')->latest();
+    }
+
+    /**
      * @param $thread
      *
      * @return string
