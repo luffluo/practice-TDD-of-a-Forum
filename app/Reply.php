@@ -54,4 +54,14 @@ class Reply extends Model
         // lt <
         return $this->created_at->gt(Carbon::now()->subMinute());
     }
+
+    /**
+     * @return array
+     */
+    public function mentionedUsers()
+    {
+        preg_match_all('/\@([^\s\.]+)/', $this->body, $matches);
+
+        return $matches[1];
+    }
 }

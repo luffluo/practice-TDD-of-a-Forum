@@ -33,25 +33,12 @@ class RepliesController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      */
-    public function store(CreatePostRequest $request, $channelSlug, Thread $thread, Reply $reply)
+    public function store(CreatePostRequest $request, $channelSlug, Thread $thread)
     {
-        $reply = $thread->addReply([
+        return $thread->addReply([
             'body'    => $request->body,
             'user_id' => auth()->id(),
-        ]);
-
-        preg_match_all('/\@([^\s\.]+)/', $reply->body, $matches);
-
-        $names = $matches[1];
-        foreach ($names as $name) {
-            $user = User::query()->whereName($name)->first();
-
-            if ($user) {
-                $user->notify(new YouWereMentioned($reply));
-            }
-        }
-
-        return $reply->load('owner');
+        ])->load('owner');
     }
 
     /**

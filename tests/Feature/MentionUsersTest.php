@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class MentionUsersTest extends TestCase
 {
-    // use DatabaseMigrations;
+    use DatabaseMigrations;
 
     public function test_mentioned_users_in_a_reply_are_notified()
     {

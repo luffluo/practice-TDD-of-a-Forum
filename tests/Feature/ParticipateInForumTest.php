@@ -113,8 +113,8 @@ class ParticipateInForumTest extends TestCase
             'body' => 'something forbidden fuck',
         ]);
 
-        $this->post($thread->path() . '/replies', $reply->toArray())
-            ->assertStatus(429);
+        $this->postJson($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(422);
     }
 
     public function test_users_may_only_reply_a_maximum_of_once_per_minute()
