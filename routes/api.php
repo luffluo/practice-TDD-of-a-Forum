@@ -14,3 +14,5 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/users', 'UsersController@index');
+
+Route::post('/users/{user}/avatar', 'UserAvatarController@store')->name('avatar');
