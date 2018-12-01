@@ -49,6 +49,7 @@
             'user' => Auth::user(),
         ]) !!}
     </script>
+    @yield('header')
 </head>
 
 <body>
@@ -61,6 +62,8 @@
 </div>
 
 <!-- Scripts -->
-<script src="{{ mix('/js/app.js') }}"></script>
+    <script src="{{ mix('/js/app.js') }}"></script>
+    @yield('scripts')
+
 </body>
 </html>

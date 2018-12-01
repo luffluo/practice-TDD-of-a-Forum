@@ -263,6 +263,11 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "http://registry.npm.taobao.org/asynckit/download/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
+at.js@^1.5.4:
+  version "1.5.4"
+  resolved "http://registry.npm.taobao.org/at.js/download/at.js-1.5.4.tgz#8fc60cc80eadbe4874449b166a818e7ae1d784c1"
+  integrity sha1-j8YMyA6tvkh0RJsWaoGOeuHXhME=
+
 atob@^2.1.1:
   version "2.1.2"
   resolved "http://registry.npm.taobao.org/atob/download/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
@@ -3906,6 +3911,11 @@ isurl@^1.0.0-alpha5:
   dependencies:
     has-to-string-tag-x "^1.2.0"
     is-object "^1.0.1"
+
+jquery.caret@^0.3.1:
+  version "0.3.1"
+  resolved "http://registry.npm.taobao.org/jquery.caret/download/jquery.caret-0.3.1.tgz#9c093318faf327eff322e826ca9f3241368bc7b8"
+  integrity sha1-nAkzGPrzJ+/zIugmyp8yQTaLx7g=
 
 jquery@^3.1.1:
   version "3.3.1"
