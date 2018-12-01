@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Thread;
 use App\Channel;
-use App\Inspections\Spam;
 use Illuminate\Http\Request;
 use App\Filters\ThreadsFilter;
 
@@ -39,7 +38,7 @@ class ThreadsController extends Controller
             $query->where('channel_id', $channel->id);
         }
 
-        return $query->get();
+        return $query->paginate(20);
     }
 
     /**
