@@ -28,6 +28,8 @@ Vue.component('thread-view', require('./Pages/Thread.vue'));
 Vue.component('favorite', require('./components/Favorite.vue'));
 Vue.component('user-notifications', require('./components/UserNotifications.vue'));
 
+Vue.component('avatar-form', require('./components/AvatarForm'));
+
 const app = new Vue({
     el: '#app'
 });
