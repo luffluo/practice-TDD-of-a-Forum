@@ -9,6 +9,18 @@
                         {{ $profileUser->name }}
                         <small>注册于{{ $profileUser->created_at->diffForHumans() }}</small>
                     </h1>
+
+                    @can('update', $profileUser)
+                        <form action="{{ route('avatar', $profileUser) }}" method="post" enctype="multipart/form-data">
+                            {{ csrf_field() }}
+
+                            <input type="file" name="avatar">
+
+                            <button type="submit" class="btn btn-primary">Add Avatar</button>
+                        </form>
+                    @endcan
+
+                    <img src="/storage/{{ $profileUser->avatar() }}" width="200" height="200">
                 </div>
 
                 @forelse($activities as $date => $activity)

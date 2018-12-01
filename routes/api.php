@@ -12,7 +12,3 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::get('/users', 'UsersController@index');
-
-Route::post('/users/{user}/avatar', 'UserAvatarController@store')->name('avatar');

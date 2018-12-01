@@ -11,8 +11,8 @@ class ThreadsTableSeeder extends Seeder
      */
     public function run()
     {
-        // App\Thread::query()->truncate();
-        // App\Reply::query()->truncate();
+        App\Thread::query()->truncate();
+        App\Reply::query()->truncate();
 
         $users = App\User::all();
         $channels = App\Channel::all();
