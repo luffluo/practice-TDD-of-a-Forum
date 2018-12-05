@@ -70,12 +70,15 @@ class ThreadsController extends Controller
         $thread = new Thread([
             'title' => $request->title,
             'body'  => $request->body,
-            'slug'  => $request->title,
         ]);
 
         $thread->creator()->associate(auth()->id());
         $thread->channel()->associate($request->channel_id);
         $thread->save();
+
+        if ($request->expectsJson()) {
+            return response($thread, 201);
+        }
 
         return redirect($thread->path())
             ->with('flash', 'Your thread has been published!');

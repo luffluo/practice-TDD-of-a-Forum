@@ -79,15 +79,25 @@ class CreateThreadsTest extends TestCase
     {
         $this->signIn();
 
-        $thread = create('App\Thread', ['title' => 'Foo Title', 'slug' => 'foo-title']);
+        create('App\Thread', [], 2);
+
+        $thread = create('App\Thread', ['title' => 'Foo Title']);
 
         $this->assertEquals('foo-title', $thread->fresh()->slug);
 
-        $this->post(route('threads'), $thread->toArray());
-        $this->assertTrue(\App\Thread::whereSlug('foo-title-2')->exists());
+        $thread = $this->postJson(route('threads'), $thread->toArray())->json();
+        $this->assertEquals("foo-title-{$thread['id']}", $thread['slug']);
+    }
 
-        $this->post(route('threads'), $thread->toArray());
-        $this->assertTrue(\App\Thread::whereSlug('foo-title-3')->exists());
+    public function test_a_thread_with_a_title_that_ends_in_a_number_should_generate_the_proper_slug()
+    {
+        $this->signIn();
+
+        $thread = create('App\Thread', ['title' => 'Something 24']);
+
+        $thread = $this->postJson(route('threads'), $thread->toArray())->json();
+
+        $this->assertEquals("something-24-{$thread['id']}", $thread['slug']);
     }
 
     public function test_authorized_users_can_delete_threads()
