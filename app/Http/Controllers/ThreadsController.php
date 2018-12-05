@@ -70,6 +70,7 @@ class ThreadsController extends Controller
         $thread = new Thread([
             'title' => $request->title,
             'body'  => $request->body,
+            'slug'  => str_slug($request->title),
         ]);
 
         $thread->creator()->associate(auth()->id());
