@@ -17,6 +17,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Route::get('/register/confirm', 'Auth\RegisterConfirmationController@index')->name('register.confirm');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -45,8 +46,6 @@ Route::delete('/threads/{channel}/{thread}/subscriptions', 'SubscriptionsControl
 Route::get('/profiles/{user}','ProfilesController@show')->name('profile');
 Route::get('/profiles/{user}/notifications','UserNotificationsController@index');
 Route::delete('/profiles/{user}/notifications/{notification}','UserNotificationsController@destroy');
-
-Route::get('/register/confirm', 'Api\RegisterConfirmationController@index')->name('register.confirm');
 
 Route::get('/api/users', 'APi\UsersController@index');
 Route::post('/api/users/{user}/avatar', 'Api\UserAvatarController@store')->name('avatar');
