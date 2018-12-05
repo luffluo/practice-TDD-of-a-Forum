@@ -17,6 +17,10 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\NotifyMentionedUsers',
             'App\Listeners\NotifySubscribers',
         ],
+
+        'Illuminate\Auth\Events\Registered' => [
+            'App\Listeners\SendEmailConfirmationRequest',
+        ],
     ];
 
     /**
@@ -27,7 +31,6 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
         //
     }
 }
