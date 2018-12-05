@@ -16,12 +16,12 @@ class CreateThreadsTest extends TestCase
      *
      * @return void
      */
-    public function test_an_authenticated_user_can_create_new_forum_threads()
+    public function test_an_user_can_create_new_forum_threads()
     {
         $this->signIn();
 
         $thread = make('App\Thread');
-        $response = $this->post('/threads', $thread->toArray());
+        $response = $this->post(route('threads'), $thread->toArray());
 
         $this->get($response->headers->get('Location'))
             ->assertSee($thread->title)
@@ -33,15 +33,21 @@ class CreateThreadsTest extends TestCase
         $this->withExceptionHandling();
 
         $this->get('/threads/create')
-            ->assertRedirect('/login');
+            ->assertRedirect(route('login'));
 
         $this->post('/threads')
-            ->assertRedirect('/login');
+            ->assertRedirect(route('login'));
     }
 
-    public function test_authenticated_users_must_first_confirm_their_email_address_before_creating_threads()
+    public function test_new_users_must_first_confirm_their_email_address_before_creating_threads()
     {
-        $this->publishThread()
+        $user = factory('App\User')->states('unconfirmed')->create();
+
+        $this->signIn($user);
+
+        $thread = make('App\Thread');
+
+        $this->post(route('threads'), $thread->toArray())
             ->assertRedirect('/threads')
             ->assertSessionHas('flash', 'You must first confirm your email address.');
     }
@@ -90,7 +96,7 @@ class CreateThreadsTest extends TestCase
         $this->withExceptionHandling();
 
         $this->delete('/threads/channel/thread')
-            ->assertRedirect('/login');
+            ->assertRedirect(route('login'));
 
         $this->signIn();
         $thread = create('App\Thread');
@@ -103,6 +109,6 @@ class CreateThreadsTest extends TestCase
 
         $thread = make('App\Thread', $overrides);
 
-        return $this->post('/threads', $thread->toArray());
+        return $this->post(route('threads'), $thread->toArray());
     }
 }
