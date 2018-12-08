@@ -25,9 +25,10 @@ Route::get('/threads','ThreadsController@index')->name('threads');
 Route::get('/threads/create','ThreadsController@create');
 
 Route::get('/threads/{channel}/{thread}','ThreadsController@show');
-Route::patch('/threads/{channel}/{thread}','ThreadsController@update');
 Route::delete('/threads/{channel}/{thread}','ThreadsController@destroy');
 Route::post('/threads','ThreadsController@store');
+
+Route::post('/locked-threads/{thread}', 'LockedThreadsController@store')->name('locked-threads.store');
 
 Route::get('/threads/{channel}','ThreadsController@index');
 
