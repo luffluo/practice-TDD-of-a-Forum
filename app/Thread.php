@@ -11,11 +11,15 @@ class Thread extends Model
 
     protected $table = 'threads';
 
-    protected $fillable = ['title', 'body', 'slug', 'best_reply_id'];
+    protected $fillable = ['title', 'body', 'slug', 'best_reply_id', 'locked'];
 
     protected $with = ['creator', 'channel'];
 
     protected $appends = ['isSubscribedTo'];
+
+    protected $casts = [
+        'locked' => 'boolean',
+    ];
 
     protected static function boot()
     {
@@ -146,5 +150,10 @@ class Thread extends Model
     public function markBestReply($reply)
     {
         $this->update(['best_reply_id' => $reply->id]);
+    }
+
+    public function lock()
+    {
+        $this->update(['locked' => true]);
     }
 }

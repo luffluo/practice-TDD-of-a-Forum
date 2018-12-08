@@ -9,6 +9,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class BestReplyTest extends TestCase
 {
+    use DatabaseMigrations;
+
     /**
      * A basic test example.
      *
