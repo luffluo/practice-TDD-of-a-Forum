@@ -9,13 +9,6 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-Vue.prototype.authorize = function (hander) {
-
-    let user = window.App.user;
-
-    return user ? hander(user) : false;
-};
-
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

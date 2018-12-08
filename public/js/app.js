@@ -3362,7 +3362,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             editing: false,
             id: this.data.id,
             body: this.data.body,
-            isBest: false,
+            isBest: this.data.isBest,
             reply: this.data
         };
     },
@@ -3373,6 +3373,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return __WEBPACK_IMPORTED_MODULE_1_moment___default()(this.data.created_at).fromNow() + '...';
         }
     },
+
+    created: function created() {
+        var _this = this;
+
+        window.events.$on('best-reply-selected', function (id) {
+            _this.isBest = id === _this.id;
+        });
+    },
+
 
     methods: {
         update: function update() {
@@ -3402,6 +3411,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         markBestReply: function markBestReply() {
             this.isBest = true;
+            axios.post('/replies/' + this.id + '/best');
+            window.events.$emit('best-reply-selected', this.id);
         }
     }
 });
@@ -51475,10 +51486,10 @@ var render = function() {
                 name: "show",
                 rawName: "v-show",
                 value: !_vm.isBest,
-                expression: "! isBest"
+                expression: "!isBest"
               }
             ],
-            staticClass: "btn btn-default btn-xs ml-a",
+            staticClass: "btn btn-xs btn-default ml-a",
             on: { click: _vm.markBestReply }
           },
           [_vm._v("Best Reply")]
@@ -63213,13 +63224,6 @@ __webpack_require__("./resources/assets/js/bootstrap.js");
 
 window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 
-Vue.prototype.authorize = function (hander) {
-
-  var user = window.App.user;
-
-  return user ? hander(user) : false;
-};
-
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -63295,29 +63299,12 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
-
-// import Echo from 'laravel-echo'
-
-// window.Pusher = require('pusher-js');
-
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: 'your-pusher-key'
-// });
-
 window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 
 var authorizations = __webpack_require__("./resources/assets/js/authorizations.js");
 
 Vue.prototype.authorize = function () {
-    if (!window.App.signedIn) {
-        return false;
-    }
+    if (!window.App.signedIn) return false;
 
     for (var _len = arguments.length, params = Array(_len), _key = 0; _key < _len; _key++) {
         params[_key] = arguments[_key];
@@ -63326,7 +63313,6 @@ Vue.prototype.authorize = function () {
     if (typeof params[0] === 'string') {
         return authorizations[params[0]](params[1]);
     }
-
     return params[0](window.App.user);
 };
 

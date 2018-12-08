@@ -37,34 +37,16 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
-
-// import Echo from 'laravel-echo'
-
-// window.Pusher = require('pusher-js');
-
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: 'your-pusher-key'
-// });
-
 window.Vue = require('vue');
 
 let authorizations = require('./authorizations');
 
 Vue.prototype.authorize = function (...params) {
-    if (! window.App.signedIn) {
-        return false;
-    }
+    if (! window.App.signedIn) return false;
 
     if (typeof params[0] === 'string') {
         return authorizations[params[0]](params[1]);
     }
-
     return params[0](window.App.user);
 };
 
@@ -72,6 +54,6 @@ Vue.prototype.signedIn = window.App.signedIn;
 
 window.events = new Vue();
 
-window.flash = function (message, level = 'success') {
-    window.events.$emit('flash', {message, level});
-}
+window.flash = function (message,level = 'success') {
+    window.events.$emit('flash',{ message,level });
+};

@@ -31,12 +31,12 @@
         </div>
 
         <div class="panel-footer level">
-            <div v-if="authorize('updateReply', reply)">
+            <div v-if="authorize('updateReply',reply)">
                 <button class="btn btn-xs mr-1" @click="editReply">Edit</button>
                 <button class="btn btn-xs btn-danger mr-1" @click="destroy">Delete</button>
             </div>
 
-            <button class="btn btn-default btn-xs ml-a" @click="markBestReply" v-show="! isBest">Best Reply</button>
+            <button class="btn btn-xs btn-default ml-a" @click="markBestReply" v-show="!isBest">Best Reply</button>
         </div>
     </div>
 </template>
@@ -55,7 +55,7 @@
                 editing: false,
                 id: this.data.id,
                 body: this.data.body,
-                isBest: false,
+                isBest: this.data.isBest,
                 reply: this.data,
             };
         },
@@ -64,6 +64,12 @@
             ago() {
                 return moment(this.data.created_at).fromNow() + '...';
             },
+        },
+
+        created() {
+            window.events.$on('best-reply-selected', id => {
+                this.isBest = (id === this.id);
+            });
         },
 
         methods: {
@@ -98,7 +104,9 @@
 
             markBestReply() {
                 this.isBest = true;
-            },
+                axios.post('/replies/' + this.id + '/best');
+                window.events.$emit('best-reply-selected',this.id);
+            }
         },
     };
 </script>
