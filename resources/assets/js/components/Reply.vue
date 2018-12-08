@@ -1,5 +1,5 @@
 <template>
-    <div :id="'reply-'+id" class="panel panel-default">
+    <div :id="'reply-'+id" class="panel" :class="isBest ? 'panel-success' : 'panel-default'">
         <div class="panel-heading">
             <div class="level">
                 <h5 class="flex">
@@ -22,7 +22,7 @@
                         <textarea class="form-control" v-model="body" required></textarea>
                     </div>
 
-                    <button class="btn btn-xs btn-primary" >Update</button>
+                    <button class="btn btn-xs btn-primary">Update</button>
                     <button class="btn btn-xs btn-link" @click="cancelReply" type="button">Cancel</button>
                 </form>
             </div>
@@ -30,9 +30,13 @@
             <div v-else v-html="body"></div>
         </div>
 
-        <div class="panel-footer level" v-if="canUpdate">
-            <button class="btn btn-xs mr-1" @click="editReply">Edit</button>
-            <button class="btn btn-xs btn-danger mr-1" @click="destroy">Delete</button>
+        <div class="panel-footer level">
+            <div v-if="canUpdate">
+                <button class="btn btn-xs mr-1" @click="editReply">Edit</button>
+                <button class="btn btn-xs btn-danger mr-1" @click="destroy">Delete</button>
+            </div>
+
+            <button class="btn btn-default btn-xs ml-a" @click="markBestReply" v-show="! isBest">Best Reply</button>
         </div>
     </div>
 </template>
@@ -51,6 +55,7 @@
                 editing: false,
                 id: this.data.id,
                 body: this.data.body,
+                isBest: false,
             };
         },
 
@@ -96,6 +101,10 @@
 
                 this.$emit('deleted', this.data.id);
             },
+
+            markBestReply() {
+                this.isBest = true;
+            }
         },
     };
 </script>
