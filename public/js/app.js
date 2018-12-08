@@ -3353,24 +3353,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['data'],
+    props: ['reply'],
 
     components: { Favorite: __WEBPACK_IMPORTED_MODULE_0__Favorite_vue___default.a },
 
     data: function data() {
         return {
             editing: false,
-            id: this.data.id,
-            body: this.data.body,
-            isBest: this.data.isBest,
-            reply: this.data
+            id: this.reply.id,
+            body: this.reply.body,
+            isBest: this.reply.isBest
         };
     },
 
 
     computed: {
         ago: function ago() {
-            return __WEBPACK_IMPORTED_MODULE_1_moment___default()(this.data.created_at).fromNow() + '...';
+            return __WEBPACK_IMPORTED_MODULE_1_moment___default()(this.reply.created_at).fromNow() + '...';
         }
     },
 
@@ -3385,7 +3384,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         update: function update() {
-            axios.patch('/replies/' + this.data.id, {
+            axios.patch('/replies/' + this.id, {
                 body: this.body
             }).catch(function (error) {
                 flash(error.response.data, 'danger');
@@ -3405,9 +3404,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.editing = false;
         },
         destroy: function destroy() {
-            axios.delete('/replies/' + this.data.id);
+            axios.delete('/replies/' + this.id);
 
-            this.$emit('deleted', this.data.id);
+            this.$emit('deleted', this.id);
         },
         markBestReply: function markBestReply() {
             this.isBest = true;
@@ -51299,7 +51298,7 @@ var render = function() {
           { key: reply.id },
           [
             _c("reply", {
-              attrs: { data: reply },
+              attrs: { reply: reply },
               on: {
                 deleted: function($event) {
                   _vm.remove(index)
@@ -51385,15 +51384,15 @@ var render = function() {
         _c("div", { staticClass: "level" }, [
           _c("h5", { staticClass: "flex" }, [
             _c("a", {
-              attrs: { href: "/profiles/" + _vm.data.owner.name },
-              domProps: { textContent: _vm._s(_vm.data.owner.name) }
+              attrs: { href: "/profiles/" + _vm.reply.owner.name },
+              domProps: { textContent: _vm._s(_vm.reply.owner.name) }
             }),
             _vm._v("\n                said "),
             _c("span", { domProps: { textContent: _vm._s(_vm.ago) } })
           ]),
           _vm._v(" "),
           _vm.signedIn
-            ? _c("div", [_c("favorite", { attrs: { reply: _vm.data } })], 1)
+            ? _c("div", [_c("favorite", { attrs: { reply: _vm.reply } })], 1)
             : _vm._e()
         ])
       ]),
@@ -51455,46 +51454,43 @@ var render = function() {
           : _c("div", { domProps: { innerHTML: _vm._s(_vm.body) } })
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "panel-footer level" }, [
-        _vm.authorize("updateReply", _vm.reply)
-          ? _c("div", [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-xs mr-1",
-                  on: { click: _vm.editReply }
-                },
-                [_vm._v("Edit")]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-xs btn-danger mr-1",
-                  on: { click: _vm.destroy }
-                },
-                [_vm._v("Delete")]
-              )
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: !_vm.isBest,
-                expression: "!isBest"
-              }
-            ],
-            staticClass: "btn btn-xs btn-default ml-a",
-            on: { click: _vm.markBestReply }
-          },
-          [_vm._v("Best Reply")]
-        )
-      ])
+      _vm.authorize("owns", _vm.reply) ||
+      _vm.authorize("owns", _vm.reply.thread)
+        ? _c("div", { staticClass: "panel-footer level" }, [
+            _vm.authorize("owns", _vm.reply)
+              ? _c("div", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-xs mr-1",
+                      on: { click: _vm.editReply }
+                    },
+                    [_vm._v("Edit")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-xs btn-danger mr-1",
+                      on: { click: _vm.destroy }
+                    },
+                    [_vm._v("Delete")]
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.authorize("owns", _vm.reply.thread)
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-xs btn-default ml-a",
+                    on: { click: _vm.markBestReply }
+                  },
+                  [_vm._v("Best Reply")]
+                )
+              : _vm._e()
+          ])
+        : _vm._e()
     ]
   )
 }
@@ -63250,8 +63246,10 @@ var app = new Vue({
 var user = window.App.user;
 
 module.exports = {
-    updateReply: function updateReply(reply) {
-        return reply.user_id === user.id;
+    owns: function owns(model) {
+        var prop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'user_id';
+
+        return model[prop] === user.id;
     }
 };
 

@@ -26,6 +26,11 @@ class Reply extends Model
         });
 
         static::deleted(function (Reply $reply) {
+
+            if ($reply->id == $reply->thread->best_reply_id) {
+                $reply->thread->update(['best_reply_id' => null]);
+            }
+
             $reply->thread->decrement('replies_count', 1);
         });
     }
