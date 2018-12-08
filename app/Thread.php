@@ -11,7 +11,7 @@ class Thread extends Model
 
     protected $table = 'threads';
 
-    protected $fillable = ['title', 'body', 'slug'];
+    protected $fillable = ['title', 'body', 'slug', 'best_reply_id'];
 
     protected $with = ['creator', 'channel'];
 
@@ -141,5 +141,10 @@ class Thread extends Model
         }
 
         $this->attributes['slug'] = $slug;
+    }
+
+    public function markBestReply($reply)
+    {
+        $this->update(['best_reply_id' => $reply->id]);
     }
 }
