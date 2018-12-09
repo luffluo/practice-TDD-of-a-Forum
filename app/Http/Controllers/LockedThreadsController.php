@@ -12,8 +12,13 @@ class LockedThreadsController extends Controller
         $this->middleware(['auth', 'admin']);
     }
 
-    public function store(Request $request, Thread $thread)
+    public function store(Thread $thread)
     {
-        $thread->lock();
+        $thread->update(['locked' => true]);
+    }
+
+    public function destroy(Thread $thread)
+    {
+        $thread->update(['locked' => false]);
     }
 }
